@@ -44,6 +44,7 @@ export function BinomialLab() {
   const [showCumulative, setShowCumulative] = useState(true)
 
   const values = useMemo(() => binomialValues(n, p), [n, p])
+  const q = 1 - p
   const mean = binomialMean(n, p)
   const variance = binomialVariance(n, p)
   const mode = binomialMode(n, p)
@@ -71,7 +72,7 @@ export function BinomialLab() {
     })
   }
 
-  const formulaLatex = String.raw`P(X = ${selectedX}) = \binom{${n}}{${selectedX}} (${p.toFixed(2)})^{${selectedX}} (${(1 - p).toFixed(2)})^{${n - selectedX}}`
+  const formulaLatex = String.raw`P(X = ${selectedX}) = \binom{${n}}{${selectedX}} (${p.toFixed(2)})^{${selectedX}} (${q.toFixed(2)})^{${n - selectedX}}`
 
   return (
     <section className="lab-section accent-cyan" id="binomial">
@@ -79,8 +80,8 @@ export function BinomialLab() {
         index="01"
         eyebrow="Discrete distribution lab"
         title="The Binomial Lab"
-        description="Fixed trials. Two outcomes. A constant probability. Independent trials. Change n and p, then watch a single number become a whole distribution."
-        chips={['fixed n', 'two outcomes', 'constant p', 'independent trials']}
+        description="A fixed number n of independent trials, each with two outcomes and a constant success probability p. Change n and p, then watch a single number become a whole distribution."
+        chips={['fixed n', 'independent trials', 'two outcomes', 'constant p']}
         accent="cyan"
       />
 
@@ -194,7 +195,7 @@ export function BinomialLab() {
         <div className="chart-panel panel">
           <div className="panel-heading">
             <span>Probability mass function</span>
-            <span className="mono-tag">B({n}, {p.toFixed(2)})</span>
+            <span className="mono-tag">Bin({n}, {p.toFixed(2)})</span>
           </div>
           <ProbabilityChart
             values={values}
@@ -217,7 +218,7 @@ export function BinomialLab() {
           </div>
           <div className="chart-note">
             <span>Hover a bar for exact values. Use the arrow keys to move the selection.</span>
-            <span><Formula>{String.raw`F(x)=P(X\le x)`}</Formula></span>
+            <span><Formula>{String.raw`q=1-p=${q.toFixed(2)}`}</Formula></span>
           </div>
         </div>
       </div>
@@ -227,11 +228,12 @@ export function BinomialLab() {
         <div className="formula-panel panel">
           <div className="panel-heading">
             <span>Model anatomy</span>
-            <span className="panel-live"><i /> S2.1</span>
+            <span className="panel-live"><i /> LS2 · 1.1</span>
           </div>
           <div className="formula-hero">
             <span>PMF</span>
-            <Formula block>{String.raw`P(X=x)=\binom{n}{x}p^x(1-p)^{n-x}`}</Formula>
+            <Formula block>{String.raw`P(X=x)=\binom{n}{x}p^xq^{\,n-x}`}</Formula>
+            <p className="formula-definition"><Formula>{String.raw`q=1-p`}</Formula></p>
           </div>
           <div className="formula-row">
             <div>
@@ -240,7 +242,7 @@ export function BinomialLab() {
             </div>
             <div>
               <span>Variance</span>
-              <Formula block>{String.raw`\mathrm{Var}(X)=np(1-p)`}</Formula>
+              <Formula block>{String.raw`\mathrm{Var}(X)=npq`}</Formula>
             </div>
           </div>
           <div className="model-note">
@@ -248,22 +250,22 @@ export function BinomialLab() {
             <p>
               The binomial counts the number of ways to arrange x successes among n trials.
               That count is <Formula>{String.raw`\binom{n}{x}`}</Formula>, and each arrangement has
-              probability <Formula>{String.raw`p^x(1-p)^{n-x}`}</Formula>.
+              probability <Formula>{String.raw`p^xq^{\,n-x}`}</Formula>.
             </p>
           </div>
           <div className="variance-note">
             <span>Signature</span>
             <p>
-              Binomial variance is always below its mean: <Formula>{String.raw`np(1-p) < np`}</Formula> when <Formula>{String.raw`0<p<1`}</Formula>.
+              Binomial variance is always below its mean: <Formula>{String.raw`npq<np`}</Formula> when <Formula>{String.raw`0<p<1`}</Formula>.
             </p>
           </div>
           <div className="model-check">
             <span className="model-note-tag">Check the model</span>
             <ul>
               <li><b>Fixed n</b><span>the number of trials is known in advance</span></li>
+              <li><b>Independent</b><span>one trial does not affect another</span></li>
               <li><b>Two outcomes</b><span>each trial is success or failure</span></li>
               <li><b>Constant p</b><span>the success probability never changes</span></li>
-              <li><b>Independent</b><span>one trial does not affect another</span></li>
             </ul>
           </div>
         </div>

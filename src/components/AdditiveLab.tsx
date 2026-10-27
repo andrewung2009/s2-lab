@@ -78,7 +78,7 @@ export function AdditiveLab() {
     <div className="additive panel">
       <div className="sim-heading">
         <div>
-          <span className="panel-kicker">Additive property</span>
+          <span className="panel-kicker">Extension · beyond the notes</span>
           <h3>Two streams become one</h3>
           <p>Independent Poisson processes add. The merged stream is exactly Po(λ₁ + λ₂).</p>
         </div>

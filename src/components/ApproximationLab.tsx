@@ -31,11 +31,13 @@ export function ApproximationLab() {
   )
   const nLarge = n >= 50
   const pSmall = p <= 0.1
-  const comfortable = nLarge && pSmall
+  const meanSmall = lambda <= 10
+  const primaryConditions = nLarge && pSmall
+  const comfortable = primaryConditions && meanSmall
   const verdict = comfortable
-    ? 'Comfortable approximation'
-    : nLarge || pSmall
-      ? 'Borderline — check the other condition'
+    ? 'Conditions met'
+    : primaryConditions
+      ? 'Check np ≤ 10'
       : 'Conditions not met'
 
   useEffect(() => () => cancelAnimationFrame(frameRef.current), [])
@@ -77,8 +79,8 @@ export function ApproximationLab() {
         index="03"
         eyebrow="Limit lab"
         title="Binomial → Poisson"
-        description="When n is large and p is small, the binomial's rare-event tail becomes almost indistinguishable from a Poisson with the same mean. Watch the bars and the curve collapse onto each other."
-        chips={['n large', 'p small', 'λ = np', 'rare events']}
+        description="When n is large and p is small, the binomial's rare-event tail becomes almost indistinguishable from a Poisson with the same mean. The notes also give normal approximations for the other regimes."
+        chips={['n large', 'p small', 'np ≤ 10', 'no continuity correction']}
         accent="amber"
       />
 
@@ -133,23 +135,26 @@ export function ApproximationLab() {
             ))}
           </div>
 
-          <div className={`validity ${comfortable ? 'is-good' : nLarge || pSmall ? 'is-mid' : 'is-bad'}`}>
+          <div className={`validity ${comfortable ? 'is-good' : primaryConditions ? 'is-mid' : 'is-bad'}`}>
             <div className="validity-head">
               <span>Approximation check</span>
               <strong>{verdict}</strong>
             </div>
             <div className="validity-chips">
               <span className={nLarge ? 'is-ok' : 'is-warn'}>
-                <i /> n ≥ 50
+                <i /> n large
               </span>
               <span className={pSmall ? 'is-ok' : 'is-warn'}>
                 <i /> p ≤ 0.1
               </span>
-              <span className={lambda > 0 && lambda < 20 ? 'is-ok' : 'is-warn'}>
-                <i /> λ modest
+              <span className={meanSmall ? 'is-ok' : 'is-warn'}>
+                <i /> np ≤ 10
               </span>
             </div>
-            <p>Common rule of thumb. Edexcel expects a comment that n is large and p is small.</p>
+            <p>
+              Notes rule: n is large and p is small. For calculation use np ≤ 10 and p ≤ 0.1.
+              Do not apply a continuity correction.
+            </p>
           </div>
 
           <button
@@ -203,7 +208,7 @@ export function ApproximationLab() {
         <div className="chart-panel panel">
           <div className="panel-heading">
             <span>Overlay</span>
-            <span className="mono-tag">B({n}, {p.toFixed(3)}) ≈ Po({lambda.toFixed(2)})</span>
+            <span className="mono-tag">Bin({n}, {p.toFixed(3)}) ≈ Po({lambda.toFixed(2)})</span>
           </div>
 
 
@@ -212,7 +217,7 @@ export function ApproximationLab() {
             startIndex={startIndex}
             overlay={metrics.poisson}
             accent="cyan"
-            barLabel="B(n, p)"
+            barLabel="Bin(n, p)"
             overlayLabel={`Po(${lambda.toFixed(2)})`}
             height={340}
             ariaLabel={`Binomial distribution with n ${n} and p ${p.toFixed(3)} overlaid with a Poisson distribution with mean ${lambda.toFixed(2)}. Maximum gap ${(metrics.maxDifference * 100).toFixed(2)} percentage points.`}
@@ -240,7 +245,7 @@ export function ApproximationLab() {
 
           <div className="formula-strip is-amber">
             <span className="formula-strip-label">The move</span>
-            <Formula>{String.raw`B(n,p)\;\approx\;\mathrm{Po}(np)`}</Formula>
+            <Formula>{String.raw`\mathrm{Bin}(n,p)\;\approx\;\mathrm{Po}(np)`}</Formula>
             <span className="formula-result">λ = {lambda.toFixed(2)}</span>
           </div>
           <div className="chart-note">
@@ -263,12 +268,86 @@ export function ApproximationLab() {
         <div className="approx-bottom-formulas">
           <div>
             <span>Binomial</span>
-            <Formula block>{String.raw`\mathrm{E}(X)=np,\quad \mathrm{Var}(X)=np(1-p)`}</Formula>
+            <Formula block>{String.raw`\mathrm{E}(X)=np,\quad \mathrm{Var}(X)=npq`}</Formula>
+            <p className="formula-definition"><Formula>{String.raw`q=1-p`}</Formula></p>
           </div>
           <div>
             <span>Poisson limit</span>
             <Formula block>{String.raw`\mathrm{E}(X)=\lambda,\quad \mathrm{Var}(X)=\lambda`}</Formula>
           </div>
+        </div>
+      </div>
+
+      <div className="approx-ladder panel">
+        <div className="approx-ladder-head">
+          <div>
+            <span className="panel-kicker">Notes coverage · 1.3</span>
+            <h3>The approximation ladder</h3>
+            <p>
+              The notes give three routes. The Poisson limit is the lab above; the normal
+              routes take over once the mean is large.
+            </p>
+          </div>
+          <span className="mono-tag">LS2 · Chapter 1</span>
+        </div>
+
+        <div className="ladder-grid">
+          <article className="ladder-card is-poisson">
+            <div className="ladder-top">
+              <span>01</span>
+              <b>no continuity correction</b>
+            </div>
+            <h4>Poisson → Binomial</h4>
+            <Formula block>{String.raw`\mathrm{Bin}(n,p)\to\mathrm{Po}(np)`}</Formula>
+            <ul>
+              <li>n is large and p is small</li>
+              <li>
+                for calculation: <Formula>{String.raw`np\le 10`}</Formula> and{' '}
+                <Formula>{String.raw`p\le 0.1`}</Formula>
+              </li>
+              <li><Formula>{String.raw`\lambda=np`}</Formula></li>
+            </ul>
+            <p className="ladder-note">Do not apply a continuity correction.</p>
+          </article>
+
+          <article className="ladder-card is-normal">
+            <div className="ladder-top">
+              <span>02</span>
+              <b>apply continuity correction</b>
+            </div>
+            <h4>Normal → Binomial</h4>
+            <Formula block>{String.raw`\mathrm{Bin}(n,p)\to N(np,npq)`}</Formula>
+            <ul>
+              <li>n is large and <Formula>{String.raw`p\approx 0.5`}</Formula></li>
+              <li>
+                <Formula>{String.raw`np>5`}</Formula> and <Formula>{String.raw`nq>5`}</Formula>;
+                for calculation <Formula>{String.raw`np>10`}</Formula>
+              </li>
+              <li>
+                <Formula>{String.raw`\mu=np`}</Formula>,{' '}
+                <Formula>{String.raw`\sigma^2=npq`}</Formula>
+              </li>
+            </ul>
+            <p className="ladder-note">Apply a continuity correction.</p>
+          </article>
+
+          <article className="ladder-card is-normal">
+            <div className="ladder-top">
+              <span>03</span>
+              <b>apply continuity correction</b>
+            </div>
+            <h4>Normal → Poisson</h4>
+            <Formula block>{String.raw`\mathrm{Po}(\lambda)\to N(\lambda,\lambda)`}</Formula>
+            <ul>
+              <li><Formula>{String.raw`\lambda`}</Formula> is large</li>
+              <li>for calculation: <Formula>{String.raw`\lambda>10`}</Formula></li>
+              <li>
+                <Formula>{String.raw`\mu=\lambda`}</Formula>,{' '}
+                <Formula>{String.raw`\sigma^2=\lambda`}</Formula>
+              </li>
+            </ul>
+            <p className="ladder-note">Apply a continuity correction.</p>
+          </article>
         </div>
       </div>
     </section>

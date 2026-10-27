@@ -291,7 +291,7 @@ export function GaltonBoard({ onApply }: { onApply?: (rows: number, bias: number
         <div>
           <span className="panel-kicker">Interactive simulation</span>
           <h3>Galton board</h3>
-          <p>Each ball makes {rows} independent left/right choices. The bins become B({rows}, {bias.toFixed(2)}).</p>
+          <p>Each ball makes {rows} independent left/right choices. The bins become Bin({rows}, {bias.toFixed(2)}).</p>
         </div>
         <div className="sim-readout">
           <span>balls</span>
@@ -307,7 +307,7 @@ export function GaltonBoard({ onApply }: { onApply?: (rows: number, bias: number
         />
         <div className="galton-legend" aria-hidden="true">
           <span><i className="is-bar" /> simulated bins</span>
-          <span><i className="is-dash" /> B({rows}, {bias.toFixed(2)})</span>
+          <span><i className="is-dash" /> Bin({rows}, {bias.toFixed(2)})</span>
         </div>
       </div>
 

@@ -57,8 +57,8 @@ export function PoissonLab() {
         index="02"
         eyebrow="Random arrivals lab"
         title="The Poisson Lab"
-        description="No fixed number of trials. No natural upper limit. Just a constant average rate and events that arrive independently. Change λ and watch the distribution breathe."
-        chips={['events occur singly', 'independently', 'at random', 'constant average rate']}
+        description="Events occur randomly or at a constant average rate, singly and independently. There is no fixed number of trials and no natural upper limit. Change λ and watch the distribution breathe."
+        chips={['random / constant rate', 'singly', 'independently', 'no upper limit']}
         accent="magenta"
       />
 
@@ -224,7 +224,7 @@ export function PoissonLab() {
         <div className="formula-panel panel">
           <div className="panel-heading">
             <span>Model anatomy</span>
-            <span className="panel-live"><i /> S2.1</span>
+            <span className="panel-live"><i /> LS2 · 1.2</span>
           </div>
           <div className="formula-hero">
             <span>PMF</span>
@@ -256,19 +256,18 @@ export function PoissonLab() {
             </p>
           </div>
           <div className="model-note">
-            <span className="model-note-tag">Add them</span>
+            <span className="model-note-tag">Extension</span>
             <p>
-              Independent Poisson variables add:
+              Beyond these notes: independent Poisson variables add,
               <Formula>{String.raw`\mathrm{Po}(a)+\mathrm{Po}(b)=\mathrm{Po}(a+b)`}</Formula>.
             </p>
           </div>
-          <div className="model-check">
+          <div className="model-check is-stacked">
             <span className="model-note-tag">Check the model</span>
             <ul>
+              <li><b>Randomly</b><span>events occur at a constant average rate with no predictable pattern</span></li>
               <li><b>Singly</b><span>events never occur at the same instant</span></li>
               <li><b>Independently</b><span>one event does not affect the next</span></li>
-              <li><b>At random</b><span>no predictable pattern in time or space</span></li>
-              <li><b>Constant rate</b><span>the average rate stays steady</span></li>
             </ul>
           </div>
         </div>

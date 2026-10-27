@@ -2150,6 +2150,21 @@ button {
   border-top: 1px dashed rgba(148, 163, 184, 0.14);
 }
 
+.formula-definition {
+  margin: 0;
+  color: var(--dim);
+  font-size: 9px;
+}
+
+.formula-definition .formula {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.model-check.is-stacked ul {
+  grid-template-columns: 1fr;
+}
+
 .approx-bottom {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -2193,6 +2208,140 @@ button {
 .approx-bottom-formulas .formula {
   color: var(--text);
   font-size: 10px;
+}
+
+.approx-ladder {
+  margin-top: 22px;
+  padding: 25px;
+}
+
+.approx-ladder-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.approx-ladder-head h3 {
+  margin: 5px 0 6px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.approx-ladder-head p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.ladder-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ladder-card {
+  --accent: var(--amber);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.025);
+}
+
+.ladder-card.is-poisson {
+  border-color: rgba(251, 191, 36, 0.24);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(251, 191, 36, 0.08), transparent 55%),
+    rgba(148, 163, 184, 0.025);
+}
+
+.ladder-card.is-normal {
+  --accent: var(--magenta);
+  border-color: rgba(232, 121, 249, 0.2);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(232, 121, 249, 0.07), transparent 55%),
+    rgba(148, 163, 184, 0.025);
+}
+
+.ladder-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ladder-top span {
+  color: var(--accent);
+}
+
+.ladder-top b {
+  color: var(--dim);
+  font-weight: 500;
+}
+
+.ladder-card h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.ladder-card .formula {
+  color: var(--text);
+  font-size: 10px;
+}
+
+.ladder-card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.ladder-card li {
+  position: relative;
+  padding-left: 12px;
+  color: var(--muted);
+  font-size: 9.5px;
+  line-height: 1.45;
+}
+
+.ladder-card li::before {
+  content: '';
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.ladder-card li .formula {
+  font-size: 9.5px;
+}
+
+.ladder-note {
+  margin: auto 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.13);
+  color: var(--dim);
+  font-size: 9px;
 }
 
 /* Footer */
@@ -2435,6 +2584,10 @@ button {
     grid-template-columns: 1fr;
     gap: 24px;
   }
+
+  .ladder-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {
@@ -2508,8 +2661,14 @@ button {
   .galton,
   .arrivals,
   .additive,
-  .formula-panel {
+  .formula-panel,
+  .approx-ladder {
     padding: 16px;
+  }
+
+  .approx-ladder-head {
+    flex-direction: column;
+    gap: 8px;
   }
 
   .sim-heading {
@@ -2671,5 +2830,3 @@ button {
     transition-duration: 0.001ms !important;
   }
 }
-
-

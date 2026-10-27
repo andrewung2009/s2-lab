@@ -18,16 +18,16 @@ export function Footer() {
         </div>
 
         <div className="footer-map">
-          <span className="footer-label">Specification map</span>
+          <span className="footer-label">Notes map</span>
           <ul>
             <li>
-              <b>1.1</b> Binomial &amp; Poisson models, cumulative probabilities
+              <b>1.1</b> Binomial distribution, mean and variance
             </li>
             <li>
-              <b>1.2</b> Mean and variance
+              <b>1.2</b> Poisson distribution, mean and variance
             </li>
             <li>
-              <b>1.3</b> Poisson approximation to the binomial
+              <b>1.3</b> Poisson and Normal approximations, continuity correction
             </li>
           </ul>
         </div>
@@ -35,8 +35,8 @@ export function Footer() {
         <div className="footer-note">
           <span className="footer-label">A note</span>
           <p>
-            Not endorsed by Pearson. No past-paper content is reproduced. Aligned in
-            spirit to Unit S2 (WST02), Issue 3.
+            Not endorsed by Pearson. No past-paper content or question examples are
+            reproduced. Based on the LS2 Chapter 1 notes.
           </p>
           <a href="#top">Back to top ↑</a>
         </div>
@@ -44,7 +44,7 @@ export function Footer() {
 
       <div className="footer-bottom">
         <span>Built for curious statisticians.</span>
-        <span>B(n, p) × Po(λ)</span>
+        <span>Bin(n, p) × Po(λ)</span>
       </div>
     </footer>
   )

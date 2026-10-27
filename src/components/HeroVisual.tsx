@@ -43,7 +43,7 @@ export function HeroVisual() {
             <span className="live-dot" />
             Live model
           </div>
-          <span className="mono-tag">B(18, 0.35)</span>
+          <span className="mono-tag">Bin(18, 0.35)</span>
         </div>
         <div className="hero-card-body">
           <div className="hero-card-label">
@@ -57,7 +57,7 @@ export function HeroVisual() {
             <span>18</span>
           </div>
         </div>
-        <div className="hero-card-formula">X ~ B(n, p)</div>
+        <div className="hero-card-formula">X ~ Bin(n, p)</div>
       </div>
 
       <div className="hero-lab-card is-poisson">

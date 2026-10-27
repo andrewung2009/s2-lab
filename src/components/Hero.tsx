@@ -9,7 +9,7 @@ export function Hero() {
         <div className="hero-copy">
           <div className="hero-eyebrow">
             <span className="eyebrow-line" />
-            Edexcel IAL · Statistics 2 · WST02
+            Edexcel IAL · S2 · LS2 Chapter 1
           </div>
           <h1>
             Probability,
@@ -17,8 +17,9 @@ export function Hero() {
             made <em>visible.</em>
           </h1>
           <p className="hero-subtitle">
-            A hands-on distribution lab for the Binomial and Poisson models. Change the
-            parameters, watch the shape move, and build the intuition that S2 rewards.
+            A hands-on distribution lab for the Binomial and Poisson models, built from the
+            LS2 Chapter 1 notes. Change the parameters, watch the shape move, and build the
+            intuition that S2 rewards.
           </p>
 
           <div className="hero-actions">
@@ -33,7 +34,7 @@ export function Hero() {
 
           <div className="hero-formulas">
             <span className="hero-formula-pill">
-              <Formula>{String.raw`X \sim B(n,p)`}</Formula>
+              <Formula>{String.raw`X \sim \mathrm{Bin}(n,p)`}</Formula>
               <i>fixed trials</i>
             </span>
             <span className="hero-formula-pill is-magenta">
@@ -49,8 +50,8 @@ export function Hero() {
       <div className="hero-footer">
         <div className="hero-stats">
           <div>
-            <strong>S2.1</strong>
-            <span>spec area</span>
+            <strong>1.1–1.3</strong>
+            <span>notes covered</span>
           </div>
           <div>
             <strong>02</strong>

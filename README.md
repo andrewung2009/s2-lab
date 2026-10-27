@@ -1,18 +1,20 @@
 # S2 // LAB — Binomial & Poisson, made visible
 
-An interactive distribution lab for **Edexcel International A Level Statistics 2 (WST02)**.
+An interactive distribution lab for **Edexcel International A Level Statistics 2 (WST02)**,
+built from the **LS2 Chapter 1 notes**.
 
-The site focuses on the S2.1 content:
+The site covers:
 
-- the Binomial distribution `B(n, p)`
-- the Poisson distribution `Po(λ)`
-- mean and variance
+- the Binomial distribution `Bin(n, p)` and its four conditions
+- the Poisson distribution `Po(λ)` and its three conditions
+- mean and variance, including `Var(X) = npq` with `q = 1 − p`
 - cumulative probability phrasing
-- the Poisson additive property
 - the Poisson approximation to the binomial (`λ = np`)
+- the Normal approximations to the Binomial and Poisson, with continuity correction
+- an additive-property extension beyond the notes
 
-It is an independent study resource. It is not endorsed by Pearson and does not reproduce
-past-paper content.
+It is an independent study resource. It is not endorsed by Pearson. It does not reproduce
+past-paper content or the question examples from the notes.
 
 ## What is inside
 
@@ -20,8 +22,9 @@ past-paper content.
   presets, and a Galton board simulation.
 - **Poisson Lab** — rate × interval rescaling, live PMF, a Poisson arrival timeline, interval
   histogram convergence, and an additive-property lab.
-- **Approximation Lab** — overlaid `B(n, p)` and `Po(np)` distributions, a residual chart,
-  error metrics, a conditions check, and a morph animation.
+- **Approximation Lab** — overlaid `Bin(n, p)` and `Po(np)` distributions, a residual chart,
+  error metrics, a conditions check, a morph animation, and the full approximation ladder from
+  the notes.
 
 Everything is client-side, static, and designed for GitHub Pages.
 
@@ -71,8 +74,10 @@ Pages.
 
 - Probabilities are evaluated in log space using a Lanczos log-gamma implementation, so large
   `n` values remain stable.
-- The Poisson approximation conditions are presented as the usual rule of thumb
-  (`n ≥ 50`, `p ≤ 0.1`), not as a strict theorem. The exam point is to comment that `n` is large
-  and `p` is small, then use `λ = np`.
+- The Poisson approximation follows the notes: `n` large and `p` small, with calculation
+  conditions `np ≤ 10` and `p ≤ 0.1`, then `λ = np`. No continuity correction is used.
+- The Normal approximation cards follow the notes: `np > 5` and `nq > 5` (calculation
+  `np > 10`) for the Binomial, and `λ > 10` for the Poisson. Both require a continuity
+  correction.
 - Cumulative probability phrases follow the S2 convention `F(x) = P(X ≤ x)`, including the
   off-by-one cases for “at least” and “more than”.
