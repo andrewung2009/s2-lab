@@ -1,30 +1,28 @@
-# S2 // LAB — Binomial & Poisson, made visible
+# S2 // LAB — LS2 Chapter 1, in motion
 
-An interactive distribution lab for **Edexcel International A Level Statistics 2 (WST02)**,
-built from the **LS2 Chapter 1 notes**.
+Animated notes and worked question-solving labs for **Edexcel International A Level Statistics 2
+(WST02)**, built only from the **LS2 Chapter 1 notes**.
 
-The site covers:
+The site covers exactly the notes:
 
 - the Binomial distribution `Bin(n, p)` and its four conditions
 - the Poisson distribution `Po(λ)` and its three conditions
 - mean and variance, including `Var(X) = npq` with `q = 1 − p`
-- cumulative probability phrasing
-- the Poisson approximation to the binomial (`λ = np`)
+- the Poisson approximation to the binomial (`λ = np`, no continuity correction)
 - the Normal approximations to the Binomial and Poisson, with continuity correction
-- an additive-property extension beyond the notes
 
 It is an independent study resource. It is not endorsed by Pearson. It does not reproduce
 past-paper content or the question examples from the notes.
 
 ## What is inside
 
-- **Binomial Lab** — live PMF, cumulative shading, probability phrase translator, parameter
-  presets, and a Galton board simulation.
-- **Poisson Lab** — rate × interval rescaling, live PMF, a Poisson arrival timeline, interval
-  histogram convergence, and an additive-property lab.
-- **Approximation Lab** — overlaid `Bin(n, p)` and `Po(np)` distributions, a residual chart,
-  error metrics, a conditions check, a morph animation, and the full approximation ladder from
-  the notes.
+- **Binomial Lab** — animated PMF build, cumulative shading, live probability readout, and an
+  animated worked solution that updates with n, p, x and the probability phrase.
+- **Poisson Lab** — λ = μt interval scaling, an auto-playing Poisson arrival timeline, interval
+  convergence histogram, and an animated worked solution.
+- **Approximation Labs** — three routes from the notes: `Bin → Po`, `Bin → Normal` and
+  `Po → Normal`, each with condition checks, continuity-correction controls, a live curve, and a
+  worked exact-vs-approximate solution.
 
 Everything is client-side, static, and designed for GitHub Pages.
 
@@ -63,9 +61,10 @@ Pages.
 
 - React 19 + Vite + TypeScript
 - Custom SVG charts with keyboard/touch interaction
-- Canvas 2D for the Galton board
-- Canvas-free Poisson timeline rendered in SVG
+- Animated Poisson timeline and interval histogram in SVG
 - Numerically stable log-space distribution functions in `src/lib/distributions.ts`
+- Normal PDF/CDF and continuity-correction helpers in `src/lib/normal.ts`
+- Animated worked-solution steps in `src/components/SolutionSteps.tsx`
 - Vitest coverage for the probability maths
 - KaTeX for live formulas
 - Custom CSS design system in `src/styles/global.css`
@@ -76,8 +75,8 @@ Pages.
   `n` values remain stable.
 - The Poisson approximation follows the notes: `n` large and `p` small, with calculation
   conditions `np ≤ 10` and `p ≤ 0.1`, then `λ = np`. No continuity correction is used.
-- The Normal approximation cards follow the notes: `np > 5` and `nq > 5` (calculation
+- The Normal approximation labs follow the notes: `np > 5` and `nq > 5` (calculation
   `np > 10`) for the Binomial, and `λ > 10` for the Poisson. Both require a continuity
   correction.
-- Cumulative probability phrases follow the S2 convention `F(x) = P(X ≤ x)`, including the
-  off-by-one cases for “at least” and “more than”.
+- The question-solving readouts use `F(x) = P(X ≤ x)`, including the off-by-one cases for
+  “at least” and “more than”. This is a solver tool, not extra notes content.

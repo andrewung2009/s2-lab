@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 const LINKS = [
-  { href: '#binomial', label: 'Binomial', id: 'binomial' },
-  { href: '#poisson', label: 'Poisson', id: 'poisson' },
-  { href: '#approximation', label: 'Approximation', id: 'approximation' },
+  { href: '#binomial', label: '1.1 Binomial', id: 'binomial' },
+  { href: '#poisson', label: '1.2 Poisson', id: 'poisson' },
+  { href: '#approximation', label: '1.3 Approx', id: 'approximation' },
 ]
 
 export function Nav() {
@@ -77,4 +77,3 @@ export function Nav() {
     </header>
   )
 }
-

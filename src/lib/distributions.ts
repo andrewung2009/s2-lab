@@ -176,6 +176,3 @@ export function niceMax(value: number): number {
 export function probabilityArraySum(values: number[]): number {
   return kahanSum(values)
 }
-
-
-

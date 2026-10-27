@@ -7,7 +7,6 @@ import {
 } from '../lib/distributions'
 import { formatNumber, formatProbability } from '../lib/format'
 import { PHRASE_OPTIONS, resolvePhrase, type Phrase } from '../lib/phrases'
-import { AdditiveLab } from './AdditiveLab'
 import { Formula } from './Formula'
 import { PoissonArrivals } from './PoissonArrivals'
 import { ProbabilityChart } from './ProbabilityChart'
@@ -15,20 +14,8 @@ import { ProbabilityReadout } from './ProbabilityReadout'
 import { SectionHeader } from './SectionHeader'
 import { SegmentedControl } from './SegmentedControl'
 import { Slider } from './Slider'
+import { SolutionSteps, type SolutionStep } from './SolutionSteps'
 import { StatChip } from './StatChip'
-
-function insightFor(lambda: number): string {
-  if (lambda < 1) {
-    return 'Mass piles up at zero. With a mean below one, the most likely count is no events at all.'
-  }
-  if (lambda < 5) {
-    return 'Right-skewed. Small counts dominate, but the upper tail stretches out. This is the classic rare-event shape.'
-  }
-  if (lambda < 12) {
-    return 'The skew is fading. As λ grows, the distribution becomes rounder and more symmetric.'
-  }
-  return 'Nearly symmetric. For large λ, the Poisson shape approaches a normal curve with mean and variance λ.'
-}
 
 export function PoissonLab() {
   const [rate, setRate] = useState(4.2)
@@ -41,23 +28,63 @@ export function PoissonLab() {
   const lambda = rate * interval
   const values = useMemo(() => poissonValues(lambda), [lambda])
   const maxIndex = values.length - 1
-
   const pmf = (value: number) => poissonPMF(lambda, value)
   const cdf = (value: number) => poissonCDF(lambda, value)
   const resolved = resolvePhrase(phrase, x, x2, maxIndex, pmf, cdf)
   const selectedX = Math.min(x, maxIndex)
-  const variance = lambda
   const mode = poissonMode(lambda)
+  const low = Math.min(selectedX, Math.min(x2, maxIndex))
+  const high = Math.max(selectedX, Math.min(x2, maxIndex))
 
-  const formulaLatex = String.raw`P(X = ${selectedX}) = \frac{e^{-${lambda.toFixed(2)}} (${lambda.toFixed(2)})^{${selectedX}}}{${selectedX}!}`
+  let expression = ''
+  if (phrase === 'exactly') {
+    expression = String.raw`P(X=${selectedX})=\frac{e^{-${lambda.toFixed(2)}}(${lambda.toFixed(2)})^{${selectedX}}}{${selectedX}!}`
+  } else if (phrase === 'atMost') {
+    expression = String.raw`P(X\le ${selectedX})=\sum_{r=0}^{${selectedX}}\frac{e^{-${lambda.toFixed(2)}}(${lambda.toFixed(2)})^r}{r!}=F(${selectedX})`
+  } else if (phrase === 'atLeast') {
+    expression =
+      selectedX === 0
+        ? String.raw`P(X\ge 0)=1`
+        : String.raw`P(X\ge ${selectedX})=1-P(X\le ${selectedX - 1})=1-F(${selectedX - 1})`
+  } else if (phrase === 'moreThan') {
+    expression =
+      selectedX === maxIndex
+        ? String.raw`P(X>${maxIndex})=0`
+        : String.raw`P(X>${selectedX})=1-F(${selectedX})`
+  } else {
+    expression =
+      low === 0
+        ? String.raw`P(0\le X\le ${high})=F(${high})`
+        : String.raw`P(${low}\le X\le ${high})=F(${high})-F(${low - 1})`
+  }
+
+  const steps: SolutionStep[] = [
+    {
+      label: 'Set the mean for this interval',
+      latex: String.raw`\lambda=\mu t=${rate.toFixed(1)}\times${interval.toFixed(1)}=${lambda.toFixed(2)}`,
+    },
+    {
+      label: 'Write the required probability',
+      latex: expression,
+      note: 'F is the cumulative distribution function from the notes.',
+    },
+    {
+      label: 'Evaluate',
+      latex: `${resolved.latex}=\\mathbf{${formatProbability(resolved.probability)}}`,
+    },
+    {
+      label: 'Mean and variance',
+      latex: String.raw`E(X)=\lambda=${lambda.toFixed(2)},\quad \mathrm{Var}(X)=\lambda=${lambda.toFixed(2)}`,
+    },
+  ]
 
   return (
     <section className="lab-section accent-magenta" id="poisson">
       <SectionHeader
         index="02"
-        eyebrow="Random arrivals lab"
+        eyebrow="Notes 1.2 · Poisson distribution"
         title="The Poisson Lab"
-        description="Events occur randomly or at a constant average rate, singly and independently. There is no fixed number of trials and no natural upper limit. Change λ and watch the distribution breathe."
+        description="X is the number of events in a given interval of time or space. Watch events arrive, build the count distribution, and solve the probability from the notes."
         chips={['random / constant rate', 'singly', 'independently', 'no upper limit']}
         accent="magenta"
       />
@@ -179,8 +206,8 @@ export function PoissonLab() {
 
           <div className="stat-grid">
             <StatChip label="Mean" value={formatNumber(lambda, 2)} accent="magenta" />
-            <StatChip label="Variance" value={formatNumber(variance, 2)} accent="magenta" />
-            <StatChip label="Std dev" value={formatNumber(Math.sqrt(variance), 2)} accent="magenta" />
+            <StatChip label="Variance" value={formatNumber(lambda, 2)} accent="magenta" />
+            <StatChip label="Std dev" value={formatNumber(Math.sqrt(lambda), 2)} accent="magenta" />
             <StatChip label="Mode" value={`${mode}`} accent="neutral" />
           </div>
         </aside>
@@ -201,81 +228,56 @@ export function PoissonLab() {
             ariaLabel={`Poisson distribution with mean ${lambda.toFixed(2)}. Selected outcome ${selectedX}. Probability of ${resolved.probability.toFixed(4)}.`}
             interactive
           />
-          <div className="chart-footer">
-            <span className="insight-mark">↳</span>
-            <p>{insightFor(lambda)}</p>
-          </div>
-          <div className="formula-strip">
-            <span className="formula-strip-label">Substituted PMF</span>
-            <Formula>{formulaLatex}</Formula>
-            <span className="formula-result">= {formatProbability(pmf(selectedX))}</span>
-          </div>
           <div className="chart-note">
-            <span>Mean and variance are both λ. That is the Poisson signature.</span>
-            <span><Formula>{String.raw`F(x)=P(X\le x)`}</Formula></span>
+            <span>Hover a bar for exact values. Use the arrow keys to move the selection.</span>
+            <span><Formula>{String.raw`E(X)=\mathrm{Var}(X)=\lambda`}</Formula></span>
           </div>
         </div>
       </div>
 
       <PoissonArrivals rate={rate} interval={interval} lambda={lambda} />
 
-      <div className="poisson-lower">
-        <AdditiveLab />
-        <div className="formula-panel panel">
+      <div className="lab-lower">
+        <div className="notes-panel panel">
           <div className="panel-heading">
-            <span>Model anatomy</span>
-            <span className="panel-live"><i /> LS2 · 1.2</span>
+            <span>Notes · 1.2</span>
+            <span className="panel-live"><i /> Poisson</span>
           </div>
-          <div className="formula-hero">
-            <span>PMF</span>
-            <Formula block>{String.raw`P(X=x)=\frac{e^{-\lambda}\lambda^x}{x!}`}</Formula>
+          <p className="notes-lead">X is the number of events in a given interval of time or space.</p>
+          <div className="notes-conditions">
+            <span><b>1</b> Events occur randomly or at a constant average rate.</span>
+            <span><b>2</b> Events occur singly.</span>
+            <span><b>3</b> Events occur independently.</span>
           </div>
-          <div className="formula-row">
+          <div className="notes-formulas">
             <div>
-              <span>Mean</span>
-              <Formula block>{String.raw`E(X)=\lambda`}</Formula>
+              <span>PMF</span>
+              <Formula block>{String.raw`P(X=r)=\frac{e^{-\lambda}\lambda^r}{r!},\quad r=0,1,2,\dots`}</Formula>
             </div>
-            <div>
-              <span>Variance</span>
-              <Formula block>{String.raw`\mathrm{Var}(X)=\lambda`}</Formula>
+            <div className="notes-formula-split">
+              <div>
+                <span>Mean</span>
+                <Formula block>{String.raw`E(X)=\lambda`}</Formula>
+              </div>
+              <div>
+                <span>Variance</span>
+                <Formula block>{String.raw`\mathrm{Var}(X)=\lambda`}</Formula>
+              </div>
             </div>
           </div>
-          <div className="model-note">
-            <span className="model-note-tag">Scale it</span>
-            <p>
-              If events occur at rate μ per unit, then over an interval of length t the mean is
-              <Formula>{String.raw`\lambda=\mu t`}</Formula>. This rescaling is the single most
-              common source of lost marks.
-            </p>
-          </div>
-          <div className="variance-note">
-            <span>Signature</span>
-            <p>
-              For a Poisson model, mean = variance = λ. If the sample variance sits far from the
-              mean, question the model.
-            </p>
-          </div>
-          <div className="model-note">
-            <span className="model-note-tag">Extension</span>
-            <p>
-              Beyond these notes: independent Poisson variables add,
-              <Formula>{String.raw`\mathrm{Po}(a)+\mathrm{Po}(b)=\mathrm{Po}(a+b)`}</Formula>.
-            </p>
-          </div>
-          <div className="model-check is-stacked">
-            <span className="model-note-tag">Check the model</span>
-            <ul>
-              <li><b>Randomly</b><span>events occur at a constant average rate with no predictable pattern</span></li>
-              <li><b>Singly</b><span>events never occur at the same instant</span></li>
-              <li><b>Independently</b><span>one event does not affect the next</span></li>
-            </ul>
-          </div>
+          <p className="notes-foot">
+            For a different interval at rate μ, use <Formula>{String.raw`\lambda=\mu t`}</Formula>.
+          </p>
         </div>
+
+        <SolutionSteps
+          model={String.raw`X\sim\mathrm{Po}(${lambda.toFixed(2)})`}
+          steps={steps}
+          accent="magenta"
+          revision={`${rate}-${interval}-${selectedX}-${x2}-${phrase}-${showCumulative}`}
+          footer="The count per interval is animated above. Change λ, x or the phrase to update the solution."
+        />
       </div>
     </section>
   )
 }
-
-
-
-

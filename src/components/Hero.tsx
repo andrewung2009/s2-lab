@@ -9,37 +9,37 @@ export function Hero() {
         <div className="hero-copy">
           <div className="hero-eyebrow">
             <span className="eyebrow-line" />
-            Edexcel IAL · S2 · LS2 Chapter 1
+            LS2 · Chapter 1 · Animated notes
           </div>
           <h1>
-            Probability,
+            The notes,
             <br />
-            made <em>visible.</em>
+            in <em>motion.</em>
           </h1>
           <p className="hero-subtitle">
-            A hands-on distribution lab for the Binomial and Poisson models, built from the
-            LS2 Chapter 1 notes. Change the parameters, watch the shape move, and build the
-            intuition that S2 rewards.
+            Animated explanations and question-solving labs for the Binomial and Poisson
+            distributions. Built only from the LS2 Chapter 1 notes, with every probability
+            worked out step by step.
           </p>
 
           <div className="hero-actions">
             <a className="button button-primary" href="#binomial">
-              Open the Binomial Lab
+              Start with the Binomial
               <span aria-hidden="true">→</span>
             </a>
-            <a className="button button-ghost" href="#poisson">
-              Jump to Poisson
+            <a className="button button-ghost" href="#approximation">
+              Jump to approximations
             </a>
           </div>
 
           <div className="hero-formulas">
             <span className="hero-formula-pill">
               <Formula>{String.raw`X \sim \mathrm{Bin}(n,p)`}</Formula>
-              <i>fixed trials</i>
+              <i>notes 1.1</i>
             </span>
             <span className="hero-formula-pill is-magenta">
               <Formula>{String.raw`X \sim \mathrm{Po}(\lambda)`}</Formula>
-              <i>random arrivals</i>
+              <i>notes 1.2</i>
             </span>
           </div>
         </div>
@@ -54,12 +54,12 @@ export function Hero() {
             <span>notes covered</span>
           </div>
           <div>
-            <strong>02</strong>
-            <span>models</span>
+            <strong>03</strong>
+            <span>approximation routes</span>
           </div>
           <div>
-            <strong>∞</strong>
-            <span>simulations</span>
+            <strong>02</strong>
+            <span>models</span>
           </div>
         </div>
         <a className="scroll-cue" href="#binomial">

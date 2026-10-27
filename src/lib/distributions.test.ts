@@ -80,6 +80,7 @@ describe('Poisson distribution', () => {
   })
 })
 
+
 describe('Poisson approximation', () => {
   it('is close when n is large and p is small', () => {
     const metrics = approximationMetrics(1000, 0.005)

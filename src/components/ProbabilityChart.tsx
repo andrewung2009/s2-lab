@@ -262,15 +262,17 @@ export function ProbabilityChart({
                   filter={isSelected ? `url(#glow-${gradientId})` : undefined}
                   style={{ animationDelay: `${Math.min(index * 5, 360)}ms` }}
                 />
-                <rect
-                  className="chart-hit"
-                  x={margin.left + index * step}
-                  y={margin.top}
-                  width={Math.max(2, step)}
-                  height={plotHeight}
-                  onMouseEnter={() => setHovered(index)}
-                  onClick={(event) => handleBarClick(index, event)}
-                />
+                {interactive ? (
+                  <rect
+                    className="chart-hit"
+                    x={margin.left + index * step}
+                    y={margin.top}
+                    width={Math.max(2, step)}
+                    height={plotHeight}
+                    onMouseEnter={() => setHovered(index)}
+                    onClick={(event) => handleBarClick(index, event)}
+                  />
+                ) : null}
               </g>
             )
           })}
@@ -375,7 +377,3 @@ export function ProbabilityChart({
     </div>
   )
 }
-
-
-
-

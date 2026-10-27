@@ -8,7 +8,7 @@ interface SegmentedControlProps<T extends string> {
   value: T
   onChange: (value: T) => void
   label: string
-  accent?: 'cyan' | 'magenta'
+  accent?: 'cyan' | 'magenta' | 'amber'
   compact?: boolean
 }
 
